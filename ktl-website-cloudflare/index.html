@@ -736,6 +736,10 @@ document.getElementById('onboardForm').addEventListener('submit', async (e)=>{
     document.getElementById('onboardForm').reset();
     document.getElementById('descCount').textContent = "0";
     renderPendingApproved();
+    // Notify the admin by email. Fire-and-forget — don't block the user's confirmation on this.
+    fetch('/api/notify', {
+      method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(newProvider)
+    }).catch(()=>{ /* silent — notification is best-effort, not required for submission to succeed */ });
   }else{
     msg.textContent = "Something went wrong saving your submission. Please try again.";
     msg.className = "form-msg show error";
